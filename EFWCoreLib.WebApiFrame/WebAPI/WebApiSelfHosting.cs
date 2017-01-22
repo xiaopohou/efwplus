@@ -55,20 +55,35 @@ namespace EFWCoreLib.WebFrame.WebAPI
             config.MaxReceivedMessageSize = 2097152;
             //config.TransferMode = System.ServiceModel.TransferMode.Buffered;
 
+            //
             config.Routes.MapHttpRoute(
                 "efwplusApi",
                 "HISApi/{plugin}/{controller}/{action}/{id}",
                 new { id = RouteParameter.Optional });
 
+            //小型Web服务器
             config.Routes.MapHttpRoute(
                 "MiniHttp",
                 "MiniHttp/{id}",
-                new { plugin= "coresys", controller = "http", action = "html",id= RouteParameter.Optional });
+                new { plugin= "coresys", controller = "Http", action = "html",id= RouteParameter.Optional });
 
+            //升级包提供下载
             config.Routes.MapHttpRoute(
                "Upgrade",
                "Upgrade/{id}",
                new { plugin = "coresys", controller = "ClientUpgrade", action = "Upgrade", id = RouteParameter.Optional });
+
+            //登陆接口
+            config.Routes.MapHttpRoute(
+               "Login",
+               "Login/{action}/{id}",
+               new { plugin = "coresys", controller = "Login", id = RouteParameter.Optional });
+
+            //主机配置接口
+            config.Routes.MapHttpRoute(
+               "HostConfig",
+               "HostConfig/{action}/{id}",
+               new { plugin = "coresys", controller = "HostConfig", id = RouteParameter.Optional });
 
 
             //指定插件的程序集

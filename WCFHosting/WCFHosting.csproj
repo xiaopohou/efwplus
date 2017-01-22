@@ -92,6 +92,8 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="configuration\PluginSysManage.cs" />
+    <Compile Include="configuration\TimeCDKEY.cs" />
     <Compile Include="frmCDKEY.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,14 +125,17 @@
     <Compile Include="FrmSetting.Designer.cs">
       <DependentUpon>FrmSetting.cs</DependentUpon>
     </Compile>
-    <Compile Include="HostSettingConfig.cs" />
     <Compile Include="PluginManage\FrmPluginXML.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PluginManage\FrmPluginXML.Designer.cs">
       <DependentUpon>FrmPluginXML.cs</DependentUpon>
     </Compile>
-    <Compile Include="PluginManage\PluginSysManage.cs" />
+    <Compile Include="process\efwplusBaseManager.cs" />
+    <Compile Include="process\efwplusRouteManager.cs" />
+    <Compile Include="process\efwplusWebAPIManager.cs" />
+    <Compile Include="process\MongodbManager.cs" />
+    <Compile Include="process\NginxManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublishSubscibe\FrmPublishServer.cs">
@@ -145,14 +150,13 @@
     <Compile Include="PublishSubscibe\FrmPublishSub.Designer.cs">
       <DependentUpon>FrmPublishSub.cs</DependentUpon>
     </Compile>
-    <Compile Include="ReadConfig.cs" />
+    <Compile Include="configuration\ReadConfig.cs" />
     <Compile Include="RouterManage\FrmRouterXML.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="RouterManage\FrmRouterXML.Designer.cs">
       <DependentUpon>FrmRouterXML.cs</DependentUpon>
     </Compile>
-    <Compile Include="TimeCDKEY.cs" />
     <Compile Include="TimingTask\FrmTimingTask.cs">
       <SubType>Form</SubType>
     </Compile>

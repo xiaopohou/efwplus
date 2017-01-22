@@ -11,13 +11,14 @@ using EFWCoreLib.WcfFrame.DataSerialize;
 using EFWCoreLib.WcfFrame.ServerManage;
 using EFWCoreLib.WcfFrame.Utility;
 using EFWCoreLib.WcfFrame.Utility.Mongodb;
-using EFWCoreLib.WcfFrame.Utility.Nginx;
 using EFWCoreLib.WcfFrame.WcfHandler;
 
 namespace EFWCoreLib.WcfFrame
 {
     public class WcfGlobal
     {
+        private static bool IsStartBase = false;//是否开启数据服务
+        private static bool IsStartRoute = false;//是否开启路由服务 
         /// <summary>
         /// 调试模式
         /// </summary>
@@ -33,59 +34,59 @@ namespace EFWCoreLib.WcfFrame
         static ServiceHost mRouterHost = null;
         static ServiceHost mFileRouterHost = null;
 
-        public static void Main()
+        public static void MainBase()
         {
+            if (IsStartBase == true) return;
+            IsStartBase = true;//设置为开启
+
             IsDebug = HostSettingConfig.GetValue("debug") == "1" ? true : false;
             HostName = HostSettingConfig.GetValue("hostname");
             IsToken = HostSettingConfig.GetValue("token") == "1" ? true : false;
             MongoConnStr = HostSettingConfig.GetValue("mongodb_conn");
 
-            WcfGlobal.Run(StartType.KillAllProcess);
-            if (Convert.ToInt32(HostSettingConfig.GetValue("wcfservice")) == 1)
-            {
-                WcfGlobal.Run(StartType.BaseService);
-            }
-            if (Convert.ToInt32(HostSettingConfig.GetValue("filetransfer")) == 1)
-            {
-                WcfGlobal.Run(StartType.FileService);
-            }
-
-            if (Convert.ToInt32(HostSettingConfig.GetValue("router")) == 1)
-            {
-                WcfGlobal.Run(StartType.RouterBaseService);
-                WcfGlobal.Run(StartType.RouterFileService);
-            }
-
+            WcfGlobal.Run(StartType.BaseService);
+            WcfGlobal.Run(StartType.FileService);
             WcfGlobal.Run(StartType.SuperClient);
-
-            if (Convert.ToInt32(HostSettingConfig.GetValue("mongodb")) == 1)
-            {
-                WcfGlobal.Run(StartType.MongoDB);
-            }
-
-            if (Convert.ToInt32(HostSettingConfig.GetValue("timingtask")) == 1)
-            {
-                WcfGlobal.Run(StartType.MiddlewareTask);
-            }
-            
+            WcfGlobal.Run(StartType.MiddlewareTask);
             WcfGlobal.Run(StartType.PublishService);
-            if (Convert.ToInt32(HostSettingConfig.GetValue("nginx")) == 1)
-            {
-                WcfGlobal.Run(StartType.Nginx);
-            }
+
+            GetAllConfig();//获取所有配置
         }
 
-        public static void Exit()
+        public static void ExitBase()
         {
+            if (IsStartBase == false) return;
+            IsStartBase = false;//设置为开启
+
+            MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "正在准备关闭中间件服务，请等待...");
+            ClientLinkManage.UnAllConnection();//关闭所有连接
+
             WcfGlobal.Quit(StartType.PublishService);
             WcfGlobal.Quit(StartType.MiddlewareTask);
             WcfGlobal.Quit(StartType.SuperClient);
             WcfGlobal.Quit(StartType.BaseService);
             WcfGlobal.Quit(StartType.FileService);
+            
+            //WcfGlobal.Quit(StartType.MongoDB);
+            //WcfGlobal.Quit(StartType.Nginx);
+        }
+
+        public static void MainRoute()
+        {
+            if (IsStartRoute == true) return;
+            IsStartRoute = true;//设置为开启
+
+            WcfGlobal.Run(StartType.RouterBaseService);
+            WcfGlobal.Run(StartType.RouterFileService);
+        }
+
+        public static void ExitRoute()
+        {
+            if (IsStartRoute == false) return;
+            IsStartRoute = false;//设置为开启
+
             WcfGlobal.Quit(StartType.RouterBaseService);
             WcfGlobal.Quit(StartType.RouterFileService);
-            WcfGlobal.Quit(StartType.MongoDB);
-            WcfGlobal.Quit(StartType.Nginx);
         }
 
         public static void Run(StartType type)
@@ -156,17 +157,17 @@ namespace EFWCoreLib.WcfFrame
                     MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Blue, "发布订阅服务完成");
                     break;
                 case StartType.MongoDB:
-                    MongodbManager.StartDB();//开启MongoDB
-                    MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Blue, "MongoDB启动完成");
+                    //MongodbManager.StartDB();//开启MongoDB
+                    //MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Blue, "MongoDB启动完成");
                     break;
 
                 case StartType.Nginx:
-                    NginxManager.StartWeb();//开启Nginx
-                    MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Blue, "Nginx启动完成");
+                    //NginxManager.StartWeb();//开启Nginx
+                    //MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Blue, "Nginx启动完成");
                     break;
                 case StartType.KillAllProcess:
-                    MongodbManager.StopDB();//停止MongoDB  清理掉所有子进程，因为主进程关闭子进程不关闭的话，占用的端口号一样不会释放
-                    NginxManager.StopWeb();
+                    //MongodbManager.StopDB();//停止MongoDB  清理掉所有子进程，因为主进程关闭子进程不关闭的话，占用的端口号一样不会释放
+                    //NginxManager.StopWeb();
                     break;
             }
 
@@ -174,7 +175,7 @@ namespace EFWCoreLib.WcfFrame
 
         public static void Quit(StartType type)
         {
-            ClientLinkManage.UnAllConnection();//关闭所有连接
+           
             switch (type)
             {
                 case StartType.BaseService:
@@ -182,7 +183,7 @@ namespace EFWCoreLib.WcfFrame
                     {
                         if (mAppHost != null)
                         {
-                            EFWCoreLib.WcfFrame.ClientLinkPoolCache.Dispose();
+                            //EFWCoreLib.WcfFrame.ClientLinkPoolCache.Dispose();
                             ClientManage.StopHost();
                             mAppHost.Close();
                             MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "数据服务已关闭！");
@@ -252,14 +253,86 @@ namespace EFWCoreLib.WcfFrame
                     MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "订阅服务已停止");
                     break;
                 case StartType.MongoDB:
-                    MongodbManager.StopDB();//停止MongoDB
-                    MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "MongoDB已停止");
+                    //MongodbManager.StopDB();//停止MongoDB
+                    //MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "MongoDB已停止");
                     break;
                 case StartType.Nginx:
-                    NginxManager.StopWeb();
-                    MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "Nginx已停止");
+                    //NginxManager.StopWeb();
+                    //MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "Nginx已停止");
                     break;
             }
+        }
+
+        private static void GetAllConfig()
+        {
+            #region 收集配置信息
+            Action<HostRunConfigSubject> psAction = ((HostRunConfigSubject subject) =>
+            {
+                List<RemotePlugin> rpList = RemotePluginManage.GetRemotePlugin();
+                if (rpList != null)
+                {
+                    HostRunConfigObject configObj;
+                    foreach (var p in rpList)
+                    {
+                        configObj = new HostRunConfigObject();
+                        configObj.Label = "远程插件";
+                        configObj.Key = p.ServerIdentify;
+                        configObj.Value = String.Join(",", p.plugin);
+                        configObj.Memo = p.ServerIdentify + "\t" + String.Join(",", p.plugin);
+                        subject.ConfigObjList.Add(configObj);
+                    }
+                }
+            });
+            Action<HostRunConfigSubject> pubsAction = ((HostRunConfigSubject subject) =>
+            {
+                if (PublishServiceManage.serviceList != null)
+                {
+                    HostRunConfigObject configObj;
+                    foreach (var p in PublishServiceManage.serviceList)
+                    {
+                        configObj = new HostRunConfigObject();
+                        configObj.Label = "发布服务";
+                        configObj.Key = p.publishServiceName;
+                        configObj.Value = p.publishServiceName;
+                        configObj.Memo = (p.whether ? "已发布" : "未发布") + "\t" + p.publishServiceName + "\t" + p.explain;
+                        subject.ConfigObjList.Add(configObj);
+                    }
+                }
+            });
+            Action<HostRunConfigSubject> subsAction = ((HostRunConfigSubject subject) =>
+            {
+                if (PublishSubManager.psubserviceList != null)
+                {
+                    HostRunConfigObject configObj;
+                    foreach (var p in PublishSubManager.psubserviceList)
+                    {
+                        configObj = new HostRunConfigObject();
+                        configObj.Label = "订阅服务";
+                        configObj.Key = p.publishServiceName;
+                        configObj.Value = p.publishServiceName;
+                        configObj.Memo = (p.IsSub ? "已订阅" : "未订阅") + "\t" + p.publishServiceName + "\t" + p.explain;
+                        subject.ConfigObjList.Add(configObj);
+                    }
+                }
+            });
+            Action<HostRunConfigSubject> taskAction = ((HostRunConfigSubject subject) =>
+            {
+                if (MiddlewareTask.TaskConfigList != null)
+                {
+                    HostRunConfigObject configObj;
+                    foreach (var p in MiddlewareTask.TaskConfigList)
+                    {
+                        configObj = new HostRunConfigObject();
+                        configObj.Label = p.taskname;
+                        configObj.Key = p.taskname;
+                        configObj.Value = p.taskname;
+                        configObj.Memo = (p.qswitch ? "已开启" : "未开启") + "\t" + p.execfrequencyName + "\t" + p.shorttimeName + "\t" + p.serialorparallelName;
+                        subject.ConfigObjList.Add(configObj);
+                    }
+                }
+            });
+            HostRunConfigInfo.LoadConfigInfo(Identify, psAction, pubsAction, subsAction, taskAction);
+            #endregion
         }
     }
 

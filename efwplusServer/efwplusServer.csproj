@@ -5,10 +5,10 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AC7B7A34-EE66-4983-A968-C3A4B3B713AB}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>efwplusServer</RootNamespace>
-    <AssemblyName>efwplusServer</AssemblyName>
+    <AssemblyName>efwplusServerCmd</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,9 +34,17 @@
   <PropertyGroup>
     <ApplicationIcon>server.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Component\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,14 +56,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
+    <Compile Include="AutoRun.cs" />
+    <Compile Include="process\efwplusBaseManager.cs" />
+    <Compile Include="process\efwplusRouteManager.cs" />
+    <Compile Include="process\efwplusWebAPIManager.cs" />
+    <Compile Include="process\MongodbManager.cs" />
+    <Compile Include="process\NginxManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="watcher\ProcessWatcher.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -80,6 +89,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="server.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EFWCoreLib.CoreFrame\EFWCoreLib.CoreFrame.csproj">
+      <Project>{b3f41c24-1a64-4995-9398-812789014bd7}</Project>
+      <Name>EFWCoreLib.CoreFrame</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

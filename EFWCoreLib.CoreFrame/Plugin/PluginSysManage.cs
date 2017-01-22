@@ -7,6 +7,9 @@ using System.Xml;
 
 namespace EFWCoreLib.CoreFrame.Plugin
 {
+    /// <summary>
+    /// pluginsys.xml配置
+    /// </summary>
     public class PluginSysManage
     {
         private static System.Xml.XmlDocument xmlDoc = null;
@@ -17,6 +20,8 @@ namespace EFWCoreLib.CoreFrame.Plugin
             xmlDoc = new System.Xml.XmlDocument();
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.IgnoreComments = true;//忽略文档里面的注释
+
+            pluginsysFile = AppGlobal.AppRootPath + "Config\\pluginsys.xml";
             XmlReader reader = XmlReader.Create(pluginsysFile, settings);
             xmlDoc.Load(reader);
             reader.Close();

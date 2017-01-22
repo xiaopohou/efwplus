@@ -71,8 +71,10 @@ namespace EFWCoreLib.WcfFrame.ServerManage
             try
             {
                 AddClient(clientId, clientName, time, dataReply, plugin, replyidentify);
-                clientinfoList(ClientDic.Values.ToList());
-
+                if (clientinfoList != null)
+                {
+                    clientinfoList(ClientDic.Values.ToList());
+                }
                 return clientId;
             }
             catch (Exception ex)
@@ -95,7 +97,10 @@ namespace EFWCoreLib.WcfFrame.ServerManage
         public static bool UnClient(string clientId)
         {
             RemoveClient(clientId);
-            clientinfoList(ClientDic.Values.ToList());
+            if (clientinfoList != null)
+            {
+                clientinfoList(ClientDic.Values.ToList());
+            }
             return true;
         }
 
@@ -247,7 +252,10 @@ namespace EFWCoreLib.WcfFrame.ServerManage
                             RemoveClient(client.clientId);
                         }
                     }
-                    clientinfoList(ClientDic.Values.ToList());
+                    if (clientinfoList != null)
+                    {
+                        clientinfoList(ClientDic.Values.ToList());
+                    }
                 }
             }
             catch { }

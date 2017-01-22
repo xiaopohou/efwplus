@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+//using EFWCoreLib.CoreFrame.Plugin;
 
 namespace WCFHosting
 {
@@ -22,17 +23,17 @@ namespace WCFHosting
         private void InitPlugin()
         {
             List<PluginClass> plist = new List<PluginClass>();
-            List<PluginClass> plist2 = PluginSysManage.GetAllPlugin();
-            plist.AddRange(plist2.FindAll(x => (x.plugintype == "WcfModulePlugin")));
+            plist = PluginSysManage.GetAllPlugin();
+            //plist.AddRange(plist2.FindAll(x => (x.plugintype == "WcfModulePlugin")));
 
-            for (int i = 0; i < plist.Count; i++)
-            {
-                FileInfo finfo = new FileInfo(PluginSysManage.localpath + "\\" + plist[i].path);
-                PluginXmlManage.pluginfile = finfo.FullName;
-                pluginxmlClass plugin = PluginXmlManage.getpluginclass();
-                plist[i].version = plugin.version;
-                plist[i].author = plugin.author;
-            }
+            //for (int i = 0; i < plist.Count; i++)
+            //{
+            //    FileInfo finfo = new FileInfo(PluginSysManage.localpath + "\\" + plist[i].path);
+            //    PluginXmlManage.pluginfile = finfo.FullName;
+            //    pluginxmlClass plugin = PluginXmlManage.getpluginclass();
+            //    plist[i].version = plugin.version;
+            //    plist[i].author = plugin.author;
+            //}
             gridlocal.DataSource = plist;
         }
 
@@ -49,47 +50,48 @@ namespace WCFHosting
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-            if (gridlocal.CurrentCell == null) return;
+            //if (gridlocal.CurrentCell == null) return;
 
-            if (MessageBox.Show("是否卸载此插件？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.No)
-                return;
+            //if (MessageBox.Show("是否卸载此插件？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.No)
+            //    return;
 
-            List<PluginClass> plist = gridlocal.DataSource as List<PluginClass>;
-            PluginClass pc = plist[gridlocal.CurrentCell.RowIndex];
-            FileInfo finfo = null;
-            if (pc.plugintype == "WcfModulePlugin")
-            {
-                //1.卸载插件
-                EFWCoreLib.CoreFrame.Init.AppPluginManage.RemovePlugin(pc.name);
-                //2.删除插件的相关文件
-                finfo = new FileInfo(PluginSysManage.localpath + "\\" + pc.path);
-                if (finfo.Exists)
-                {
-                    PluginSysManage.DeletePlugin(pc.plugintype, pc.name);
-                    if (finfo.Directory.Exists)
-                        finfo.Directory.Delete(true);
-                    //MessageBox.Show("此插件卸载成功，必须重启WCF服务主机！","提示",MessageBoxButtons.OK,MessageBoxIcon.Information);
-                }
-            }
+            //List<PluginClass> plist = gridlocal.DataSource as List<PluginClass>;
+            //PluginClass pc = plist[gridlocal.CurrentCell.RowIndex];
+            //FileInfo finfo = null;
+            //if (pc.plugintype == "WcfModulePlugin")
+            //{
+            //    //1.卸载插件
+            //    EFWCoreLib.CoreFrame.Init.AppPluginManage.RemovePlugin(pc.name);
+            //    //2.删除插件的相关文件
+            //    finfo = new FileInfo(PluginSysManage.localpath + "\\" + pc.path);
+            //    if (finfo.Exists)
+            //    {
+            //        PluginSysManage.DeletePlugin(pc.plugintype, pc.name);
+            //        if (finfo.Directory.Exists)
+            //            finfo.Directory.Delete(true);
+            //        //MessageBox.Show("此插件卸载成功，必须重启WCF服务主机！","提示",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            //    }
+            //}
 
-            InitPlugin();
+            //InitPlugin();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string pluginfile;
-                if (PluginSetup(openFileDialog.FileName,out pluginfile) == true)
-                {
-                    EFWCoreLib.CoreFrame.Init.AppPluginManage.AddPlugin(pluginfile);
-                    //MessageBox.Show("完成插件包安装，必须重启WCF服务主机！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    InitPlugin();
-                }
-            }
+            //if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    string pluginfile;
+            //    if (PluginSetup(openFileDialog.FileName,out pluginfile) == true)
+            //    {
+            //        EFWCoreLib.CoreFrame.Init.AppPluginManage.AddPlugin(pluginfile);
+            //        //MessageBox.Show("完成插件包安装，必须重启WCF服务主机！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //        InitPlugin();
+            //    }
+            //}
         }
 
         #region 内部方法
+        /*
         private string PathCombine(string absolutePath, string relativePath)
         {
             return Path.GetFullPath(Path.Combine(absolutePath, relativePath));
@@ -178,37 +180,37 @@ namespace WCFHosting
                 CopyFolder(subDir.FullName, dPath + "//" + subDir.Name);
             }
         }
-
+        */
         #endregion
 
         private void 重载插件ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (gridlocal.CurrentCell == null) return;
-            List<PluginClass> plist = gridlocal.DataSource as List<PluginClass>;
-            PluginClass pc = plist[gridlocal.CurrentCell.RowIndex];
-            EFWCoreLib.CoreFrame.Init.AppPluginManage.RemovePlugin(pc.name);
-            EFWCoreLib.CoreFrame.Init.AppPluginManage.AddPlugin(PluginSysManage.localpath + "\\ModulePlugin\\" + pc.name + "\\plugin.xml");
-            MessageBox.Show("重载插件完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //if (gridlocal.CurrentCell == null) return;
+            //List<PluginClass> plist = gridlocal.DataSource as List<PluginClass>;
+            //PluginClass pc = plist[gridlocal.CurrentCell.RowIndex];
+            //EFWCoreLib.CoreFrame.Init.AppPluginManage.RemovePlugin(pc.name);
+            //EFWCoreLib.CoreFrame.Init.AppPluginManage.AddPlugin(PluginSysManage.localpath + "\\ModulePlugin\\" + pc.name + "\\plugin.xml");
+            //MessageBox.Show("重载插件完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void 内存卸载ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (gridlocal.CurrentCell == null) return;
-            List<PluginClass> plist = gridlocal.DataSource as List<PluginClass>;
-            PluginClass pc = plist[gridlocal.CurrentCell.RowIndex];
-            EFWCoreLib.CoreFrame.Init.AppPluginManage.RemovePlugin(pc.name);
-            //EFWCoreLib.CoreFrame.Init.AppPluginManage.AddPlugin(PluginSysManage.localpath + "\\" + pc.name + "\\plugin.xml");
-            MessageBox.Show("内存卸载插件完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //if (gridlocal.CurrentCell == null) return;
+            //List<PluginClass> plist = gridlocal.DataSource as List<PluginClass>;
+            //PluginClass pc = plist[gridlocal.CurrentCell.RowIndex];
+            //EFWCoreLib.CoreFrame.Init.AppPluginManage.RemovePlugin(pc.name);
+            ////EFWCoreLib.CoreFrame.Init.AppPluginManage.AddPlugin(PluginSysManage.localpath + "\\" + pc.name + "\\plugin.xml");
+            //MessageBox.Show("内存卸载插件完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void 内存加载ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (gridlocal.CurrentCell == null) return;
-            List<PluginClass> plist = gridlocal.DataSource as List<PluginClass>;
-            PluginClass pc = plist[gridlocal.CurrentCell.RowIndex];
-            // EFWCoreLib.CoreFrame.Init.AppPluginManage.RemovePlugin(pc.name);
-            EFWCoreLib.CoreFrame.Init.AppPluginManage.AddPlugin(PluginSysManage.localpath + "\\ModulePlugin\\" + pc.name + "\\plugin.xml");
-            MessageBox.Show("内存加载插件完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //if (gridlocal.CurrentCell == null) return;
+            //List<PluginClass> plist = gridlocal.DataSource as List<PluginClass>;
+            //PluginClass pc = plist[gridlocal.CurrentCell.RowIndex];
+            //// EFWCoreLib.CoreFrame.Init.AppPluginManage.RemovePlugin(pc.name);
+            //EFWCoreLib.CoreFrame.Init.AppPluginManage.AddPlugin(PluginSysManage.localpath + "\\ModulePlugin\\" + pc.name + "\\plugin.xml");
+            //MessageBox.Show("内存加载插件完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void 查看配置ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -217,7 +219,7 @@ namespace WCFHosting
             List<PluginClass> plist = gridlocal.DataSource as List<PluginClass>;
             PluginClass pc = plist[gridlocal.CurrentCell.RowIndex];
 
-            WCFHosting.PluginManage.FrmPluginXML xml = new PluginManage.FrmPluginXML(PluginSysManage.localpath + "\\ModulePlugin\\" + pc.name + "\\plugin.xml");
+            WCFHosting.PluginManage.FrmPluginXML xml = new PluginManage.FrmPluginXML(PluginSysManage.localpath + @"/" + pc.path);
             xml.ShowDialog();
         }
     }

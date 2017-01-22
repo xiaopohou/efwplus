@@ -21,21 +21,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "efwplusClient", "efwplusCli
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{212D87AD-51FE-48C1-BC54-64D6663B4B1E}"
 	ProjectSection(SolutionItems) = preProject
-		Output_Client\efwplusClient.exe.config = Output_Client\efwplusClient.exe.config
 		Output\efwplusServer.exe.config = Output\efwplusServer.exe.config
+		Output\efwplusServerCmd.exe.config = Output\efwplusServerCmd.exe.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{3B2AA777-F5F1-4430-B8D4-EE86F03617B6}"
 	ProjectSection(SolutionItems) = preProject
+		Output_Client\efwplusClient.exe.config = Output_Client\efwplusClient.exe.config
 		Output_Client\Config\EntLib.config = Output_Client\Config\EntLib.config
 		Output_Client\Config\pluginsys.xml = Output_Client\Config\pluginsys.xml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{2F933E85-FF97-48AA-86D9-6EAD0C067BE6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{2F933E85-FF97-48AA-86D9-6EAD0C067BE6}"
 	ProjectSection(SolutionItems) = preProject
+		Output\efwplusBase.exe.config = Output\efwplusBase.exe.config
 		Output\Config\EntLib.config = Output\Config\EntLib.config
 		Output\Config\pluginsys.xml = Output\Config\pluginsys.xml
+		Output\Config\PublishSubscibe.xml = Output\Config\PublishSubscibe.xml
 		Output\Config\SettingConfig.xml = Output\Config\SettingConfig.xml
+		Output\Config\TaskTiming.xml = Output\Config\TaskTiming.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ModulePlugin", "ModulePlugin", "{F00F794B-CA25-44B8-A0BC-706E0D570935}"
@@ -67,6 +71,35 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpgradePackage", "Tools\UpgradePackage\UpgradePackage.csproj", "{0C86FEF1-62D7-4986-985F-942F36FD4D4B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "efwplusWatcher", "Tools\efwplusWatcher\efwplusWatcher.csproj", "{C56ADF72-6E85-4579-8678-1D90E5A4E154}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostConfig", "ModulePlugin\HostConfig\HostConfig.csproj", "{7000BC9F-8A66-4D52-8EB4-6D6DCD441B1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "efwplusBase", "efwplusBase\efwplusBase.csproj", "{BCCA9DEB-5E5E-4F82-ABBE-2F02042A6796}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "efwplusRoute", "efwplusRoute\efwplusRoute.csproj", "{70558B27-A3FE-4F93-8C21-7C10EAD2A655}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "efwplusWebAPI", "efwplusWebAPI\efwplusWebAPI.csproj", "{CDB7848C-5355-4DEF-BEDA-02BA2075CECC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Route", "Route", "{8AD20073-66A5-48BF-BC40-C3B76DDC1119}"
+	ProjectSection(SolutionItems) = preProject
+		Output\efwplusRoute.exe.config = Output\efwplusRoute.exe.config
+		Output\Config\RouterBill.xml = Output\Config\RouterBill.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mongo", "Mongo", "{CEA1DF99-7924-4391-B543-11566D571334}"
+	ProjectSection(SolutionItems) = preProject
+		Output\Config\mongo.conf = Output\Config\mongo.conf
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nginx", "Nginx", "{E0638E27-0159-4AF0-A0BA-BF9B6E5A2B39}"
+	ProjectSection(SolutionItems) = preProject
+		Output\nginx\conf\nginx.conf = Output\nginx\conf\nginx.conf
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{4746D82E-57E8-4DD6-BBCC-1162D42C3E93}"
+	ProjectSection(SolutionItems) = preProject
+		Output\efwplusWebAPI.exe.config = Output\efwplusWebAPI.exe.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -244,6 +277,38 @@ Global
 		{C56ADF72-6E85-4579-8678-1D90E5A4E154}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C56ADF72-6E85-4579-8678-1D90E5A4E154}.Release|x86.ActiveCfg = Release|Any CPU
 		{C56ADF72-6E85-4579-8678-1D90E5A4E154}.Release|x86.Build.0 = Release|Any CPU
+		{7000BC9F-8A66-4D52-8EB4-6D6DCD441B1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7000BC9F-8A66-4D52-8EB4-6D6DCD441B1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7000BC9F-8A66-4D52-8EB4-6D6DCD441B1D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7000BC9F-8A66-4D52-8EB4-6D6DCD441B1D}.Debug|x86.Build.0 = Debug|Any CPU
+		{7000BC9F-8A66-4D52-8EB4-6D6DCD441B1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7000BC9F-8A66-4D52-8EB4-6D6DCD441B1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7000BC9F-8A66-4D52-8EB4-6D6DCD441B1D}.Release|x86.ActiveCfg = Release|Any CPU
+		{7000BC9F-8A66-4D52-8EB4-6D6DCD441B1D}.Release|x86.Build.0 = Release|Any CPU
+		{BCCA9DEB-5E5E-4F82-ABBE-2F02042A6796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCCA9DEB-5E5E-4F82-ABBE-2F02042A6796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCCA9DEB-5E5E-4F82-ABBE-2F02042A6796}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BCCA9DEB-5E5E-4F82-ABBE-2F02042A6796}.Debug|x86.Build.0 = Debug|Any CPU
+		{BCCA9DEB-5E5E-4F82-ABBE-2F02042A6796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCCA9DEB-5E5E-4F82-ABBE-2F02042A6796}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCCA9DEB-5E5E-4F82-ABBE-2F02042A6796}.Release|x86.ActiveCfg = Release|Any CPU
+		{BCCA9DEB-5E5E-4F82-ABBE-2F02042A6796}.Release|x86.Build.0 = Release|Any CPU
+		{70558B27-A3FE-4F93-8C21-7C10EAD2A655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70558B27-A3FE-4F93-8C21-7C10EAD2A655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70558B27-A3FE-4F93-8C21-7C10EAD2A655}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{70558B27-A3FE-4F93-8C21-7C10EAD2A655}.Debug|x86.Build.0 = Debug|Any CPU
+		{70558B27-A3FE-4F93-8C21-7C10EAD2A655}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70558B27-A3FE-4F93-8C21-7C10EAD2A655}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70558B27-A3FE-4F93-8C21-7C10EAD2A655}.Release|x86.ActiveCfg = Release|Any CPU
+		{70558B27-A3FE-4F93-8C21-7C10EAD2A655}.Release|x86.Build.0 = Release|Any CPU
+		{CDB7848C-5355-4DEF-BEDA-02BA2075CECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDB7848C-5355-4DEF-BEDA-02BA2075CECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDB7848C-5355-4DEF-BEDA-02BA2075CECC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CDB7848C-5355-4DEF-BEDA-02BA2075CECC}.Debug|x86.Build.0 = Debug|Any CPU
+		{CDB7848C-5355-4DEF-BEDA-02BA2075CECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDB7848C-5355-4DEF-BEDA-02BA2075CECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDB7848C-5355-4DEF-BEDA-02BA2075CECC}.Release|x86.ActiveCfg = Release|Any CPU
+		{CDB7848C-5355-4DEF-BEDA-02BA2075CECC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -262,5 +327,10 @@ Global
 		{BFB656C6-754C-4E2D-AA9E-E1CB3C1947B7} = {63F51231-566A-4212-9A11-7EE3DC2FA747}
 		{0C86FEF1-62D7-4986-985F-942F36FD4D4B} = {63F51231-566A-4212-9A11-7EE3DC2FA747}
 		{C56ADF72-6E85-4579-8678-1D90E5A4E154} = {63F51231-566A-4212-9A11-7EE3DC2FA747}
+		{7000BC9F-8A66-4D52-8EB4-6D6DCD441B1D} = {F00F794B-CA25-44B8-A0BC-706E0D570935}
+		{8AD20073-66A5-48BF-BC40-C3B76DDC1119} = {212D87AD-51FE-48C1-BC54-64D6663B4B1E}
+		{CEA1DF99-7924-4391-B543-11566D571334} = {212D87AD-51FE-48C1-BC54-64D6663B4B1E}
+		{E0638E27-0159-4AF0-A0BA-BF9B6E5A2B39} = {212D87AD-51FE-48C1-BC54-64D6663B4B1E}
+		{4746D82E-57E8-4DD6-BBCC-1162D42C3E93} = {212D87AD-51FE-48C1-BC54-64D6663B4B1E}
 	EndGlobalSection
 EndGlobal

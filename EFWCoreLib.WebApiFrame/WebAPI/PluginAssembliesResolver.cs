@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Dispatcher;
 using EFWCoreLib.CoreFrame.Init;
+using EFWCoreLib.WebApiFrame;
 
 namespace EFWCoreLib.WebFrame.WebAPI
 {
@@ -15,9 +17,10 @@ namespace EFWCoreLib.WebFrame.WebAPI
         public override ICollection<System.Reflection.Assembly> GetAssemblies()
         {
             List<System.Reflection.Assembly> list = new List<System.Reflection.Assembly>();
-            foreach (var p in AppPluginManage.PluginDic)
+            string[] dlls = GetPluginDll();
+            foreach (var file in dlls)
             {
-                list.AddRange(p.Value.DllList);
+                list.Add(System.Reflection.Assembly.Load(file));
             }
             list.Add(System.Reflection.Assembly.Load("EFWCoreLib.CoreFrame"));
             list.Add(System.Reflection.Assembly.Load("EFWCoreLib.WinformFrame"));
@@ -27,5 +30,19 @@ namespace EFWCoreLib.WebFrame.WebAPI
         }
 
         #endregion
+
+
+        private string[] GetPluginDll()
+        {
+            List<string> dlllist = new List<string>();
+            DirectoryInfo Dir = new DirectoryInfo(WebApiGlobal.PluginPath);
+            FileInfo[] dlls = Dir.GetFiles("*.dll", SearchOption.AllDirectories);
+            foreach(var i in dlls)
+            {
+                dlllist.Add(i.Name.Replace(".dll", ""));
+            }
+            return dlllist.ToArray();
+        }
+        
     }
 }

@@ -41,17 +41,26 @@ namespace EFWCoreLib.WcfFrame.Utility.Nginx
         /// </summary>
         public static void StopWeb()
         {
-            Process[] proc = Process.GetProcessesByName("nginx");//创建一个进程数组，把与此进程相关的资源关联。
-            for (int i = 0; i < proc.Length; i++)
+            Process[] proc;
+            try
             {
-                proc[i].Kill();  //逐个结束进程.
+                proc = Process.GetProcessesByName("nginx");//创建一个进程数组，把与此进程相关的资源关联。
+                for (int i = 0; i < proc.Length; i++)
+                {
+                    proc[i].Kill();  //逐个结束进程.
+                }
             }
-            //杀两次，因为nginx自带守护进程
-            proc = Process.GetProcessesByName("nginx");//创建一个进程数组，把与此进程相关的资源关联。
-            for (int i = 0; i < proc.Length; i++)
+            catch { }
+            try
             {
-                proc[i].Kill();  //逐个结束进程.
+                //杀两次，因为nginx自带守护进程
+                proc = Process.GetProcessesByName("nginx");//创建一个进程数组，把与此进程相关的资源关联。
+                for (int i = 0; i < proc.Length; i++)
+                {
+                    proc[i].Kill();  //逐个结束进程.
+                }
             }
+            catch { }
         }
     }
 }

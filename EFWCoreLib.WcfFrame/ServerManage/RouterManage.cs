@@ -33,13 +33,19 @@ namespace EFWCoreLib.WcfFrame.ServerManage
             //hostwcfMsg(Color.Blue, DateTime.Now, "RouterHandlerService服务正在初始化...");
             RegistrationInfo.LoadRouterBill();
             //hostwcfMsg(Color.Blue, DateTime.Now, "RouterHandlerService服务初始化完成");
-            hostwcfRouter(RegistrationList.Values.ToList());
+            if (hostwcfRouter != null)
+            {
+                hostwcfRouter(RegistrationList.Values.ToList());
+            }
         }
 
         public static void Stop()
         {
             RegistrationList.Clear();
-            hostwcfRouter(RegistrationList.Values.ToList());
+            if (hostwcfRouter != null)
+            {
+                hostwcfRouter(RegistrationList.Values.ToList());
+            }
         }
 
 
@@ -64,9 +70,11 @@ namespace EFWCoreLib.WcfFrame.ServerManage
                     regInfo.ClientNum -= 1;
                 }
             }
-
-            //界面显示
-            hostwcfRouter(RegistrationList.Values.ToList());
+            if (hostwcfRouter != null)
+            {
+                //界面显示
+                hostwcfRouter(RegistrationList.Values.ToList());
+            }
         }
 
         /// <summary>
@@ -111,10 +119,15 @@ namespace EFWCoreLib.WcfFrame.ServerManage
 
             PluginInfo pinfo = regInfo.pluginList.Find(x => x.name == para.pluginname);
             if (pinfo != null && !string.IsNullOrEmpty(pinfo.replyidentify))
+            {
                 para.replyidentify = pinfo.replyidentify;
-            //界面显示
-            hostwcfRouter(RegistrationList.Values.ToList());
+            }
 
+            if (hostwcfRouter != null)
+            {
+                //界面显示
+                hostwcfRouter(RegistrationList.Values.ToList());
+            }
             return para;
         }
 
@@ -146,8 +159,11 @@ namespace EFWCoreLib.WcfFrame.ServerManage
             //重设Message的目标终结点
             touri = new Uri(regInfo.Address);
 
-            //界面显示
-            hostwcfRouter(RegistrationList.Values.ToList());
+            if (hostwcfRouter != null)
+            {
+                //界面显示
+                hostwcfRouter(RegistrationList.Values.ToList());
+            }
         }
 
 

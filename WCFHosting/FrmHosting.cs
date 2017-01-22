@@ -8,10 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EFWCoreLib.CoreFrame.Common;
+using EFWCoreLib.CoreFrame.Init;
 using EFWCoreLib.WcfFrame;
 using EFWCoreLib.WcfFrame.ServerController;
 using EFWCoreLib.WcfFrame.ServerManage;
 using EFWCoreLib.WebApiFrame;
+using efwplus.process;
 using WCFHosting.PublishSubscibe;
 using WCFHosting.RouterManage;
 using WCFHosting.TimingTask;
@@ -21,9 +23,9 @@ namespace WCFHosting
     public partial class FrmHosting : Form
     {
         long timeCount = 0;//运行次数
-        string identify;
-        string expireDate;
-        Queue<msgobject> msgList=null;
+        //string identify;
+        //string expireDate;
+        //Queue<msgobject> msgList=null;
         //List<ClientInfo> clientdic = null;
         //List<RegistrationInfo> routerdic = null;
 
@@ -62,74 +64,100 @@ namespace WCFHosting
         public FrmHosting()
         {
             InitializeComponent();
-            msgList = new Queue<msgobject>();
+            //msgList = new Queue<msgobject>();
         }
 
-        private void StartAllHost()
+        /// <summary>
+        /// 进程通信
+        /// </summary>
+        private void ipcHandler()
         {
-            WcfGlobal.Identify = identify;
-            EFWCoreLib.WcfFrame.ServerManage.ClientManage.clientinfoList = new ClientInfoListHandler(BindGridClient);
-            EFWCoreLib.WcfFrame.ServerManage.RouterManage.hostwcfRouter = new HostWCFRouterListHandler(BindGridRouter);
-
-            WcfGlobal.Main();
-
-            if (Convert.ToInt32(HostSettingConfig.GetValue("webapi")) == 1)
+            IPCReceiveHelper ipcr = new IPCReceiveHelper();
+            Action<string> action = ((string data) =>
             {
-                WebApiGlobal.IsToken = HostSettingConfig.GetValue("token") == "1" ? true : false;
-                WebApiGlobal.Main();
-            }
-
-            RunState = HostState.Opened;
+                if (string.IsNullOrEmpty(data) == false)
+                {
+                    if (data.IndexOf("efwplusserver:") == -1)
+                    {
+                        settext(Color.Black, data);
+                        return;
+                    }
+                    //执行命令
+                    data = data.Replace("efwplusserver:", "");
+                    switch (data.ToLower())
+                    {
+                        case "exit":
+                            efwplusBaseManager.StopBase();
+                            efwplusRouteManager.StopRoute();
+                            efwplusWebAPIManager.StopAPI();
+                            MongodbManager.StopDB();
+                            NginxManager.StopWeb();
+                            //System.Environment.Exit(System.Environment.ExitCode);
+                            Process.GetCurrentProcess().Kill();
+                            break;
+                        case "restartbase":
+                            efwplusBaseManager.StopBase();
+                            efwplusBaseManager.StartBase();
+                            break;
+                        case "restartroute":
+                            efwplusRouteManager.StopRoute();
+                            efwplusRouteManager.StartRoute();
+                            break;
+                        case "restartwebapi":
+                            efwplusWebAPIManager.StopAPI();
+                            efwplusWebAPIManager.StartAPI();
+                            break;
+                        case "restartmongodb":
+                            efwplusWebAPIManager.StopAPI();
+                            efwplusWebAPIManager.StartAPI();
+                            break;
+                        case "restartnginx":
+                            efwplusWebAPIManager.StopAPI();
+                            efwplusWebAPIManager.StartAPI();
+                            break;
+                    }
+                }
+            });
+            ipcr.Init(action, IPCType.efwplusServer);
         }
 
-        private void StopAllHost()
-        {
-            MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "正在准备关闭中间件服务，请等待...");
-
-            WcfGlobal.Exit();
-            WebApiGlobal.Exit();
-    
-            RunState = HostState.NoOpen;
-        }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            timermsg.Start();
-            MiddlewareLogHelper.hostwcfMsg = new MiddlewareMsgHandler(AddMsg);
-            MiddlewareLogHelper.StartWriteFileLog();//开放中间件日志
-            int res = TimeCDKEY.InitRegedit(out expireDate,out identify);
-            if (res == 0)
-            {
-                MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Green, "软件已注册，到期时间【" + expireDate + "】");
-                StartAllHost();
-            }
-            else if (res == 1)
-            {
-                MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "软件尚未注册，请注册软件");
-            }
-            else if (res == 2)
-            {
-                MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "注册机器与本机不一致,请联系管理员");
-            }
-            else if (res == 3)
-            {
-                MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "软件试用已到期");
-            }
-            else
-            {
-                MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "软件运行出错，请重新启动");
-            }
+            //timermsg.Start();
+
+            efwplusBaseManager.StopBase();
+            efwplusRouteManager.StopRoute();
+            efwplusWebAPIManager.StopAPI();
+            MongodbManager.StopDB();
+            NginxManager.StopWeb();
+
+            efwplusBaseManager.StartBase();
+            efwplusRouteManager.StartRoute();
+            efwplusWebAPIManager.StartAPI();
+            MongodbManager.StartDB();
+            NginxManager.StartWeb();
+
+            RunState = HostState.Opened;
         }
         private void btnStop_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("您确定要停止服务吗？", "询问窗", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                StopAllHost();
+                efwplusBaseManager.StopBase();
+                efwplusRouteManager.StopRoute();
+                efwplusWebAPIManager.StopAPI();
+                MongodbManager.StopDB();
+                NginxManager.StopWeb();
+
+                RunState = HostState.NoOpen;
             }
         }
 
         private void FrmHosting_Load(object sender, EventArgs e)
         {
+            ipcHandler();
+
             this.Text = "CMDEP 云医疗数据交换平台【" + HostSettingConfig.GetValue("hostname") + "】";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.Icon = this.Icon;
@@ -178,13 +206,6 @@ namespace WCFHosting
         {
             setgrid(gridClientList, dic);
         }
-        private void AddMsg(Color clr, DateTime time, string msg)
-        {
-            msg = msg.Length > 10000 ? msg.Substring(0, 10000) : msg;
-            msgobject msgo = new msgobject(clr,time,msg);
-            msgList.Enqueue(msgo);
-            //settext(clr,"[" + time.ToString("yyyy-MM-dd HH:mm:ss") + "] : " + msg);
-        }
         private void BindGridRouter(List<RegistrationInfo> dic)
         {
             setgrid(gridRouter, dic);
@@ -216,17 +237,42 @@ namespace WCFHosting
             {
                 try
                 {
-                    StopAllHost();
+                    efwplusBaseManager.StopBase();
+                    efwplusRouteManager.StopRoute();
+                    efwplusWebAPIManager.StopAPI();
+                    MongodbManager.StopDB();
+                    NginxManager.StopWeb();
+
+                    RunState = HostState.NoOpen;
                 }
                 catch { }
-                this.Dispose(true);
+                //System.Environment.Exit(System.Environment.ExitCode);
+                Process.GetCurrentProcess().Kill();
             }
         }
 
         private void FrmHosting_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = true;
-            this.Hide();
+            if (MessageBox.Show("您确定要退出中间件服务器吗？", "询问窗", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            {
+                try
+                {
+                    efwplusBaseManager.StopBase();
+                    efwplusRouteManager.StopRoute();
+                    efwplusWebAPIManager.StopAPI();
+                    MongodbManager.StopDB();
+                    NginxManager.StopWeb();
+
+                    RunState = HostState.NoOpen;
+                }
+                catch { }
+                //System.Environment.Exit(System.Environment.ExitCode);
+                Process.GetCurrentProcess().Kill();
+            }
+            else
+            {
+                e.Cancel = true;
+            }
         }
 
         private void btnSetting_Click(object sender, EventArgs e)
@@ -253,7 +299,7 @@ namespace WCFHosting
 
         private void 清除日志ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            msgList.Clear();
+            //msgList.Clear();
             richTextMsg.Items.Clear();
         }
 
@@ -273,16 +319,16 @@ namespace WCFHosting
 
         private void 暂停日志ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (timermsg.Enabled)
-            {
-                timermsg.Enabled = false;
-                暂停日志ToolStripMenuItem.Text = "开启日志";
-            }
-            else
-            {
-                timermsg.Enabled = true;
-                暂停日志ToolStripMenuItem.Text = "暂停日志";
-            }
+            //if (timermsg.Enabled)
+            //{
+            //    timermsg.Enabled = false;
+            //    暂停日志ToolStripMenuItem.Text = "开启日志";
+            //}
+            //else
+            //{
+            //    timermsg.Enabled = true;
+            //    暂停日志ToolStripMenuItem.Text = "暂停日志";
+            //}
         }
 
         private void richTextMsg_DrawItem(object sender, DrawItemEventArgs e)
@@ -324,10 +370,10 @@ namespace WCFHosting
         //消息显示
         private void timermsg_Tick(object sender, EventArgs e)
         {
-            if (msgList.Count == 0) return;
-            msgobject msgo = msgList.Dequeue();
-            if (msgo == null) return;
-            settext(msgo.clr, "[" + msgo.time.ToString("yyyy-MM-dd HH:mm:ss") + "] : " + msgo.msg);
+            //if (msgList.Count == 0) return;
+            //msgobject msgo = msgList.Dequeue();
+            //if (msgo == null) return;
+            //settext(msgo.clr, "[" + msgo.time.ToString("yyyy-MM-dd HH:mm:ss") + "] : " + msgo.msg);
         }
 
         private void 帮助ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -361,12 +407,24 @@ namespace WCFHosting
             {
                 try
                 {
-                    MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "正在准备重启中间件服务，请等待...");
-                    StopAllHost();
-                    Application.Restart();
+                    //MiddlewareLogHelper.WriterLog(LogType.MidLog, true, Color.Red, "正在准备重启中间件服务，请等待...");
+                    efwplusBaseManager.StopBase();
+                    efwplusRouteManager.StopRoute();
+                    efwplusWebAPIManager.StopAPI();
+                    MongodbManager.StopDB();
+                    NginxManager.StopWeb();
+
+                    RunState = HostState.NoOpen;
+
+                    efwplusBaseManager.StartBase();
+                    efwplusRouteManager.StartRoute();
+                    efwplusWebAPIManager.StartAPI();
+                    MongodbManager.StartDB();
+                    NginxManager.StartWeb();
+
+                    RunState = HostState.Opened;
                 }
                 catch { }
-                this.Dispose(true);
             }
         }
         //定时任务

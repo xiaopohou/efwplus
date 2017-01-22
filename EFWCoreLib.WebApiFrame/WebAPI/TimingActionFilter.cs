@@ -16,7 +16,7 @@ namespace EFWCoreLib.WebFrame.WebAPI
 
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            if (EFWCoreLib.WcfFrame.WcfGlobal.IsDebug)
+            if (WebApiFrame.WebApiGlobal.IsDebug)
             {
                 var stopWatch = new Stopwatch();
                 actionContext.Request.Properties[Key] = stopWatch;

@@ -41,14 +41,15 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.内存卸载ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.内存加载ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.查看配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnreload = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.btnDel = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.查看配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnConfig = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridlocal)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -130,36 +131,49 @@
             this.toolStripSeparator2,
             this.查看配置ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 126);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 104);
             // 
             // 重载插件ToolStripMenuItem
             // 
             this.重载插件ToolStripMenuItem.Name = "重载插件ToolStripMenuItem";
-            this.重载插件ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.重载插件ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.重载插件ToolStripMenuItem.Text = "重载插件";
             this.重载插件ToolStripMenuItem.Click += new System.EventHandler(this.重载插件ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(121, 6);
             // 
             // 内存卸载ToolStripMenuItem
             // 
             this.内存卸载ToolStripMenuItem.Name = "内存卸载ToolStripMenuItem";
-            this.内存卸载ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.内存卸载ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.内存卸载ToolStripMenuItem.Text = "内存卸载";
             this.内存卸载ToolStripMenuItem.Click += new System.EventHandler(this.内存卸载ToolStripMenuItem_Click);
             // 
             // 内存加载ToolStripMenuItem
             // 
             this.内存加载ToolStripMenuItem.Name = "内存加载ToolStripMenuItem";
-            this.内存加载ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.内存加载ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.内存加载ToolStripMenuItem.Text = "内存加载";
             this.内存加载ToolStripMenuItem.Click += new System.EventHandler(this.内存加载ToolStripMenuItem_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(121, 6);
+            // 
+            // 查看配置ToolStripMenuItem
+            // 
+            this.查看配置ToolStripMenuItem.Name = "查看配置ToolStripMenuItem";
+            this.查看配置ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.查看配置ToolStripMenuItem.Text = "查看配置";
+            this.查看配置ToolStripMenuItem.Click += new System.EventHandler(this.查看配置ToolStripMenuItem_Click);
+            // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnConfig);
             this.panel2.Controls.Add(this.btnreload);
             this.panel2.Controls.Add(this.button3);
             this.panel2.Controls.Add(this.btnDel);
@@ -172,7 +186,7 @@
             // 
             // btnreload
             // 
-            this.btnreload.Location = new System.Drawing.Point(193, 20);
+            this.btnreload.Location = new System.Drawing.Point(337, 20);
             this.btnreload.Name = "btnreload";
             this.btnreload.Size = new System.Drawing.Size(75, 28);
             this.btnreload.TabIndex = 3;
@@ -195,43 +209,43 @@
             // 
             this.btnDel.Image = ((System.Drawing.Image)(resources.GetObject("btnDel.Image")));
             this.btnDel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDel.Location = new System.Drawing.Point(112, 20);
+            this.btnDel.Location = new System.Drawing.Point(256, 20);
             this.btnDel.Name = "btnDel";
             this.btnDel.Size = new System.Drawing.Size(75, 28);
             this.btnDel.TabIndex = 1;
             this.btnDel.Text = "卸载插件";
             this.btnDel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnDel.UseVisualStyleBackColor = true;
+            this.btnDel.Visible = false;
             this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
             // 
             // btnAdd
             // 
             this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(31, 20);
+            this.btnAdd.Location = new System.Drawing.Point(175, 20);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 28);
             this.btnAdd.TabIndex = 0;
             this.btnAdd.Text = "添加插件";
             this.btnAdd.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Visible = false;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // openFileDialog
             // 
             this.openFileDialog.Filter = "插件包|*.zip";
             // 
-            // 查看配置ToolStripMenuItem
+            // btnConfig
             // 
-            this.查看配置ToolStripMenuItem.Name = "查看配置ToolStripMenuItem";
-            this.查看配置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.查看配置ToolStripMenuItem.Text = "查看配置";
-            this.查看配置ToolStripMenuItem.Click += new System.EventHandler(this.查看配置ToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.btnConfig.Location = new System.Drawing.Point(54, 20);
+            this.btnConfig.Name = "btnConfig";
+            this.btnConfig.Size = new System.Drawing.Size(75, 28);
+            this.btnConfig.TabIndex = 4;
+            this.btnConfig.Text = "查看配置";
+            this.btnConfig.UseVisualStyleBackColor = true;
+            this.btnConfig.Click += new System.EventHandler(this.查看配置ToolStripMenuItem_Click);
             // 
             // FrmPlugin
             // 
@@ -277,5 +291,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem 查看配置ToolStripMenuItem;
+        private System.Windows.Forms.Button btnConfig;
     }
 }

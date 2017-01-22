@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -138,6 +139,7 @@
     <Compile Include="Common\DESEncryptor.cs" />
     <Compile Include="Common\ExcelHelper.cs" />
     <Compile Include="Common\ExtendMethod.cs" />
+    <Compile Include="Common\IPCHelper.cs" />
     <Compile Include="Common\SpellAndWbCode.cs" />
     <Compile Include="Common\TemplateHelper.cs" />
     <Compile Include="Common\WindowsAPI.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Init\AttributeManager\WinformControllerManager.cs" />
     <Compile Include="Init\ExecuteFun.cs" />
     <Compile Include="Init\GlobalExtend.cs" />
+    <Compile Include="Init\HostConfigManagement.cs" />
     <Compile Include="Init\MultiTask.cs" />
     <Compile Include="ORM\Attribute\ColumnAttribute.cs" />
     <Compile Include="ORM\Attribute\RelationName.cs" />

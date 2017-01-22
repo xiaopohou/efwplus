@@ -113,7 +113,6 @@
     <Compile Include="DataSerialize\FileTransfer.cs" />
     <Compile Include="DataSerialize\SerializeType.cs" />
     <Compile Include="DataSerialize\ServiceResponseData.cs" />
-    <Compile Include="HostSettingConfig.cs" />
     <Compile Include="MiddlewareLogHelper.cs" />
     <Compile Include="Utility\MiddlewareTask.cs" />
     <Compile Include="Controller\ModulePluginExtension.cs" />
@@ -131,9 +130,7 @@
     <Compile Include="ServerManage\RemotePluginManage.cs" />
     <Compile Include="ServerManage\RouterManage.cs" />
     <Compile Include="ServerManage\SuperClient.cs" />
-    <Compile Include="Utility\Mongodb\MongodbManager.cs" />
     <Compile Include="Utility\Mongodb\MongoHelper.cs" />
-    <Compile Include="Utility\Nginx\NginxManager.cs" />
     <Compile Include="ServerManage\PublishSubManager.cs" />
     <Compile Include="Utility\SSO\AuthResult.cs" />
     <Compile Include="Utility\SSO\ConvertHelper.cs" />
@@ -164,7 +161,9 @@
       <Name>EFWCoreLib.WinformFrame</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Utility\Nginx\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>Copy "$(TargetPath)" "$(SolutionDir)Output"
